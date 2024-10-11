@@ -1,0 +1,32 @@
+/* Style sheet for resume homework (resume.html) in Week 1 folder */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+ul {
+    list-style: none;
+}
+
+.resume-section {
+    background-color: rgb(244, 244, 244);
+    width: 40vw;
+    padding: 30px;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+#pfp {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+}
+
+#resume-header {
+    margin: 20px;
+    width: 30vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid red;
+}
