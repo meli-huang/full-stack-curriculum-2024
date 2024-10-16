@@ -4,12 +4,17 @@ body {
 }
 
 ul {
+    padding: 0px;
+}
+
+li {
     list-style: none;
+    padding: 8px 0px;
 }
 
 .resume-section {
     background-color: rgb(244, 244, 244);
-    width: 40vw;
+    width: 600px;
     padding: 30px;
     margin: 20px;
     border-radius: 10px;
@@ -23,10 +28,9 @@ ul {
 
 #resume-header {
     margin: 20px;
-    width: 30vw;
+    width: 380px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    border: 2px solid red;
 }
