@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shopping List Example</title>
-    <link rel="stylesheet" href="styles.css">
+    <!--<link rel="stylesheet" href="styles.css">-->
   </head>
   <body>
     <div class="container">
@@ -20,6 +20,34 @@
     </div>
 
     <script>
+
+      // JSON is in-built object that allows you to interact w json
+      // Pull the local storage item
+      let shoppingList = JSON.parse(localStorage.getItem("shoppingList"));
+      console.log(shoppingList)
+
+      if (!shoppingList) {
+        shoppingList = [];
+      } else {
+        shoppingList.forEach(element => {
+          addItem(element);
+        })
+      }
+
+      let shoppingButton = document.querySelector('button')
+      shoppingButton.addEventListener("click", createListItem)
+
+      function createListItem() {
+        // get user's text from input and call addItem
+        const input = document.querySelector("#item")
+        const inputText = input.value
+        addItem(inputText)
+
+        // resets input's text and focuses cursor back into text box
+        input.value = ""
+        input.focus()
+      }
+      
 
       //conveniently done for you!
       function addItem(text) {
@@ -39,6 +67,20 @@
         li.appendChild(span);
         li.appendChild(deleteButton);
         li.appendChild(saveButton);
+
+        deleteButton.addEventListener("click", () => {
+          list.removeChild(li);
+
+          shoppingList = shoppingList.filter((item) => item != text);
+          localStorage.setItem("shoppingList", JSON.stringify(shoppingList))
+        })
+
+        saveButton.addEventListener("click", () => {
+          console.log("Save button was clicked");
+
+          shoppingList.push(text);
+          localStorage.setItem("shoppingList", JSON.stringify(shoppingList))
+        })
         
       }
 
