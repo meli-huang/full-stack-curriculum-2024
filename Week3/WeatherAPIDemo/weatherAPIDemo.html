@@ -17,28 +17,63 @@
 </body>
 
 <script>
-		const apiKey = "";
+		const apiKey = "e531c8c62a7b5d4cce3ae699b2f8e2b2";
 
 		let temp;
 		let lat;
 		let lon;
 
 		function getData() {
-			let apiCall = ``;
-			// get lat and long
-			// get temp
+			// API call: getting lat and long of Austin
+			let apiCall = `http://api.openweathermap.org/geo/1.0/direct?q=Austin,TX,USA&limit=5&appid=6dc87f0d902ad7e89bffc74e3ba537ef`;
+			
+			// could also do: 
+			// let apiCall = `http://api.openweathermap.org/geo/1.0/direct?q=Austin,TX,USA&limit=5&appid=${apiKey}`;
+			// only works with backticks bc makes it a literal
+
+			
+			// fetch: built-in function that returns a promise
+			// wait for it to resolve
+			fetch(apiCall)
+				// change it into a json file (an array of objects)
+				.then((response) => response.json())
+
+				// get latitude and longitude
+				.then((data) => {
+					lat = data[0].lat
+					lon = data[0].lon
+
+					// Need to include these inside promise chain bc getTemp() requires lat and lon to be defined --> needs synch
+					renderLatLon();
+					getTemp();
+				})
 		}
 
 		function renderLatLon() {
+			document.querySelector("#lat").innerHTML 
+			= "Latitude: "+lat
+			document.querySelector("#lon").innerHTML 
+			= "Longitude: "+lon
 		}
 
 		function getTemp() {
-			
+			// API call: get the data of Austin now that we have lat/lon
+			apiCall = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
+
+			fetch(apiCall) 
+				.then((response) => response.json())
+				.then((data) => {
+					console.log((data))
+
+					temp = data.main.temp
+					renderTemp();
+				})
 		}
 
         
 		function renderTemp() {
-		
+			document.querySelector("#temp").innerHTML
+			= "temperature: "+temp
 		}
 	</script>
 </html>
