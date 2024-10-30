@@ -27,7 +27,7 @@ It's time to combine what we have learned about calling third-party APIs, HTML, 
 
 ```javascript
 // USE YOUR OWN API KEY
-const apiKey = "YOUR_API_KEY";
+const apiKey = "e531c8c62a7b5d4cce3ae699b2f8e2b2";
 ```
 
 ### Design (Figma)
@@ -56,7 +56,9 @@ We recommend you read the OpenWeather's API documentation before you begin writi
 - Once you have fetched the weather data, generate HTML elements that displays the current weather and the cards for five day forecast. We recommend you use a for loop to generate the cards for the five day forecast.
 
 3. Using a city's longitude and latitute, use OpenWeather's [Air Pollution API](https://openweathermap.org/api/air-pollution) to get current air quality index (AQI) for the city.
+
 4.  Use the `.svg` files in the icons folder to display the relevant graphics for the weather conditions. _Note how the name of the `.svg` files correspond to the [current.weather.icon and daily.weather.icon values](https://openweathermap.org/api/one-call-api#example) in the One Call API response._ We recommend having the value of the `src` attribute of the <img> tag to change dynamically based on API response.
+
 5. Style the website by adding CSS to the `style.css` file.
 
 ## Things to Google

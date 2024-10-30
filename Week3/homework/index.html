@@ -10,25 +10,51 @@
 <body>
 	<div id='main-container'>
 		<div id='weather-container'>
+
+			<!--container for today's weather header-->
+			<div id='today-header-container'> 
+				<p id="today-date" class="day-date"></p>
+				<h3 id="today-weather-for"></h3>
+			</div>
+
+			<!--container for today's weather statistics-->
+			<div id='today-weather-container'> 
+				<div>
+					<p id='today-weather'></p>
+					<h1 id='today-temp'></h1>
+					<p id='today-aqi'></p>
+				</div>
+				<img id='today-icon' src=''>
+			</div>
+
+			<!--container for each day's card for the upcoming week-->
+			<div id='week-container'>
+
+			</div>
+
 		</div> 
+
+
 	</div>
 	<div id='side-container'>
 		<div>
 			<input id='search-input' placeholder='search for a city'></input>
 			<button id='search-button' onclick="search()">search</button>
 		</div>
-		<ul id='search-results-list'></ul>
+
+		<ul id='search-results-list'>
+		</ul>
 	</div>
 </body>
 
 <script>
 		// USE YOUR OWN API KEY
-		const apiKey = "";
+		const apiKey = "383689258c242b13688688a5536d7b2b";
 
         // variable that stores the city that is chosen
 		let city;
         // variable that stores the weather and forecast for the city
-		let weather;
+		let weather; // UNUSED
         // the variable that stores the air quality index for the city
 		let aqi;
 
@@ -54,7 +80,7 @@
 					.then((response) => 
 						// after recieving a response, take the response from the server and convert it to JSON 
 						response.json()
-					)
+					) 
 					.then((data) => {
 						// after recieving the converted JSON data, pass the JSON to the renderSearchResults() function
 						renderSearchResults(data)
@@ -101,7 +127,118 @@
 			}
 			//printing the city object to the console
 			console.log(city);
+
             // BEGIN CODING HERE
+			getAQI();
 		}
+
+		
+		// function that sets the AQI by retrieving data from specific air quality api call
+		function getAQI() {
+			let apiCall = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${city.lat}&lon=${city.lon}&appid=${apiKey}`;
+
+			fetch(apiCall)
+				.then((response) => response.json())
+				.then((data) => {
+					aqi = data.list[0].main.aqi;
+				})
+				.then(() => getTodaysWeather())
+		}
+
+
+		// function that sets the weather for today
+		function getTodaysWeather() {
+			let apiCall = `https://api.openweathermap.org/data/2.5/weather?lat=${city.lat}&lon=${city.lon}&units=imperial&appid=${apiKey}`;
+			fetch(apiCall)
+				.then((response) => response.json())
+				.then((data) => {
+					console.log(data);
+					weather = {
+						temp: data.main.temp,
+						type: data.weather[0].main,
+						icon: data.weather[0].icon,
+					}
+				})
+				.then(() => getWeekWeather());
+		}
+
+
+		// function that fetches the 5-day weather data for this city
+		function getWeekWeather() {
+			let apiCall = `http://api.openweathermap.org/data/2.5/forecast?lat=${city.lat}&lon=${city.lon}&units=imperial&appid=${apiKey}`;
+			
+			fetch(apiCall)
+				.then((response) => response.json())
+				.then((data) => {
+					console.log(apiCall);
+					renderWeatherResults(data);
+				})
+		}
+
+
+		// function that renders weather data for next 5 days onto weather container
+		function renderWeatherResults(weatherResults) {
+			
+			// render today's header
+			document.querySelector('#today-date').innerHTML = formatDate(0);
+			document.querySelector('#today-weather-for').innerHTML = "Weather for " + city.fullName;
+
+
+			// render today's weather information
+			const todayWeather = document.querySelector('#today-weather');
+			todayWeather.innerHTML = weather.type;
+
+			const todayTemp = document.querySelector('#today-temp');
+			todayTemp.innerHTML = weather.temp + "°";
+
+			const todayAQI = document.querySelector('#today-aqi');
+			todayAQI.innerHTML = "AQI: " + aqi;
+
+			const todayIcon = document.querySelector('#today-icon');
+			const svgName = "./icons/" + weather.icon + ".svg";
+			todayIcon.setAttribute('src', svgName);
+			todayIcon.setAttribute('width', 150);
+			todayIcon.setAttribute('height', 150);
+
+
+			// render week's weather
+			const weekBox = document.querySelector('#week-container');
+
+			for (let i = 0; i < 5; i++) {
+
+				// create container for each day's card
+				const dayCard = document.createElement('div');
+				dayCard.setAttribute('class', 'day-card');
+
+				// grabs the list element corresponding to noon of the i-th day
+				const elem = weatherResults.list[(i * 8) + 4];
+
+				const dayDate = document.createElement('p');
+				dayDate.setAttribute('class', 'day-date');
+				dayDate.innerHTML = formatDate(i);
+
+				const dayIcon = document.createElement('img');
+				const svgName = "./icons/" + elem.weather[0].icon + ".svg";
+				dayIcon.setAttribute('src', svgName);
+				dayIcon.setAttribute('width', 100);
+				dayIcon.setAttribute('height', 100);
+				dayIcon.setAttribute('class', 'day-icon');
+
+				const dayTemps = document.createElement('p');
+				dayTemps.setAttribute('class', 'day-temps');
+				dayTemps.innerHTML = Math.trunc(elem.main.temp_min) + "° to " 
+					+ Math.trunc(elem.main.temp_max) + "°";
+
+
+				// add all three components into each day's card
+				dayCard.appendChild(dayDate);
+				dayCard.appendChild(dayIcon);
+				dayCard.appendChild(dayTemps);
+
+				// add this day's card to the week's container
+				weekBox.appendChild(dayCard);
+			}
+		}
+
 	</script>
 </html>

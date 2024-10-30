@@ -12,14 +12,19 @@
     box-sizing: border-box;
   }
   
+  /* IMAGE STYLING */
+  /* Default: all image tags are hidden  */ 
   img,
   .hidden {
     display: none;
   }
   
+  /* Syntax: every img tag that contains a src attribute should display */
   img[src] {
     display: block;
   }
+
+  
   
   #main-container {
     height: 100%;
@@ -59,6 +64,42 @@
     color: #ffffff;
     border-radius: 5px;
     border-width: 1px;
+  }
+
+  #today-weather-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #week-container {
+    display: flex;
+    flex-direction: row; 
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  
+  .day-card {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 3%;
+    padding: 10px;
+    width: 140px;
+    height: 170px;
+    justify-content: space-around;
+  }
+
+  .day-date {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .day-temps {
+    font-size: 20px;
+    font-weight: bold;
   }
   
   .search-result:hover {
