@@ -19,7 +19,7 @@
 
 			<!--container for today's weather statistics-->
 			<div id='today-weather-container'> 
-				<div>
+				<div id="today-weather-container-left">
 					<p id='today-weather'></p>
 					<h1 id='today-temp'></h1>
 					<p id='today-aqi'></p>
@@ -189,7 +189,7 @@
 			todayWeather.innerHTML = weather.type;
 
 			const todayTemp = document.querySelector('#today-temp');
-			todayTemp.innerHTML = weather.temp + "°";
+			todayTemp.innerHTML = Math.trunc(weather.temp) + "°";
 
 			const todayAQI = document.querySelector('#today-aqi');
 			todayAQI.innerHTML = "AQI: " + aqi;

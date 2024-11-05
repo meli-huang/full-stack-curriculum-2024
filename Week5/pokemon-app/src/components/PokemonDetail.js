@@ -5,6 +5,20 @@ import { Typography } from "@mui/material";
 
 function PokemonDetail() {
 
+  const {name} = useParams();
+  const [pokemon, setPokemon] = useState(null);
+
+  function fetchPokemonDetail() {
+    axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
+    .then((response) => {
+      setPokemon(response.data);
+      console.log(response.data);
+    })
+  }
+
+  useEffect(() => {
+    fetchPokemonDetail();
+  }, [])
 
   const imageUrl = 'https://placehold.co/400'
 
@@ -12,7 +26,7 @@ function PokemonDetail() {
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      Pokemon Detail
+      
     </div>
   );
 }
