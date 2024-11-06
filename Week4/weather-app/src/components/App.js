@@ -4,7 +4,7 @@ import '../styles/App.css'; // Import the CSS file for App
 import MainContainer from './MainContainer';
 import SideContainer from './SideContainer';
 
-const apiKey = '1788eb2fdd53249c4aed76ee51ca0e2d'; // Your OpenWeatherMap API key here
+const apiKey = 'e531c8c62a7b5d4cce3ae699b2f8e2b2'; // Your OpenWeatherMap API key here
 
 function App() {
   /*
