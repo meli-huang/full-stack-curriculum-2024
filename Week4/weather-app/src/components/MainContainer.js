@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../styles/MainContainer.css"; // Import the CSS file for MainContainer
 
+import DayCard from './DayCard';
+
 function MainContainer(props) {
 
   function formatDate(daysFromNow = 0) {
@@ -29,6 +31,7 @@ function MainContainer(props) {
   null or an empty object.
   */
   
+  const [weather, setWeather] = useState(null);
   
   /*
   STEP 3: Fetch Weather Data When City Changes.
@@ -43,6 +46,72 @@ function MainContainer(props) {
   After fetching the data, use the 'setWeather' function from the 'useState' hook to set the weather data 
   in your state.
   */
+
+  let todaysAQI;
+  let todaysWeather;
+  let weekData;
+
+  // function that sets the AQI for today
+  function getAQI() {
+    let apiCall = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${props.selectedCity.lat}&lon=${props.selectedCity.lon}&appid=${props.apiKey}`;
+
+    fetch(apiCall)
+      .then((response) => response.json())
+      .then((data) => {
+        todaysAQI = data.list[0].main.aqi;
+      })
+      .then(() => getTodaysWeather())
+  }
+
+  // function that sets the weather for today
+  function getTodaysWeather() {
+    let apiCall = `https://api.openweathermap.org/data/2.5/weather?lat=${props.selectedCity.lat}&lon=${props.selectedCity.lon}&units=imperial&appid=${props.apiKey}`;
+
+    fetch(apiCall)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        todaysWeather = {
+          temp: data.main.temp,
+          type: data.weather[0].main,
+          icon: data.weather[0].icon,
+        }
+      })
+      .then(() => getWeekWeather());
+  }
+
+  // function that fetches the 5-day weather data for this city
+  function getWeekWeather() {
+    let apiCall = `http://api.openweathermap.org/data/2.5/forecast?lat=${props.selectedCity.lat}&lon=${props.selectedCity.lon}&units=imperial&appid=${props.apiKey}`;
+    
+    fetch(apiCall)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        weekData = data;
+      })
+      .then(() => setUpWeather());
+  }
+
+  function setUpWeather() {
+    let newWeather = {
+      aqi: todaysAQI,
+      todayTemp: todaysWeather.temp,
+      todayType: todaysWeather.type,
+      todayIcon: todaysWeather.type,
+      week: weekData,
+    }
+    console.log(newWeather);
+    console.log(newWeather.week.list[1])
+    setWeather(newWeather);
+  }
+
+  useEffect(() => { 
+    if (props.selectedCity.lat == undefined) {
+      return;
+    }
+    getAQI();
+  }, [props.selectedCity]);
   
   
   return (
@@ -59,6 +128,35 @@ function MainContainer(props) {
         This is a good section to play around with React components! Create your own - a good example could be a WeatherCard
         component that takes in props, and displays data for each day of the week.
         */}
+
+        {weather && weather.week && 
+        
+        <div id='today-header-container'> 
+          <p id="today-date" className="day-date">{formatDate(0)}</p>
+          <h3 id="today-weather-for">{"Weather for " + props.selectedCity.fullName}</h3>
+        </div>
+
+        &&
+
+        <div id='today-weather-container'> 
+          <div id="today-weather-container-left">
+            <p id='today-weather'>{weather.todayType}</p>
+            <h1 id='today-temp'>{Math.trunc(weather.todayTemp) + "°"}</h1>
+            <p id='today-aqi'>{"API: " + weather.aqi}</p>
+          </div>
+          <img id='today-icon' src={"./icons/" + weather.todayIcon + ".svg"} alt=""/>
+        </div>
+
+        &&
+          <div id='week-container'>
+            <DayCard elem={weather.week.list[12]} date={formatDate(1)} />
+            <DayCard elem={weather.week.list[20]} date={formatDate(2)} />
+            <DayCard elem={weather.week.list[28]} date={formatDate(3)} />
+            <DayCard elem={weather.week.list[36]} date={formatDate(4)} />
+            <DayCard elem={weather.week.list[44]} date={formatDate(5)} />
+          </div>
+        }
+
       </div>
     </div>
   );

@@ -53,6 +53,7 @@ function SideContainer(props) {
     });
   }
 
+
   /*
   TODO: Modify the 'selectCity' function.
   
@@ -96,6 +97,7 @@ function SideContainer(props) {
       lon: lon,
     };
     console.log(city);
+    props.setSelectedCity(city);
   }
 
   return (
