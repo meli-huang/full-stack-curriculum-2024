@@ -9,6 +9,9 @@ const express = require("express");
 // returns an object
 const app = express();
 
+const db = require("./firebase");
+
+
 // for env variables
 // run npm install dotenv for dependency
 require("dotenv").config();
@@ -48,8 +51,13 @@ app.get("/", (req, res) => {
 });
 
 // get all tweets
-app.get("/api/tweets", (req, res) => {
-  res.send(tweets);
+app.get("/api/tweets", async (req, res) => {
+  const tweetsSnapshot = await db.collection("tweets").get();
+  const databaseTweets = tweetsSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+  res.json(databaseTweets);
 });
 
 // get tweets by user (param in route)

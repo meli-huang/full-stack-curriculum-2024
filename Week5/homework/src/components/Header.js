@@ -1,9 +1,10 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-//import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 function Header() {
   
+  const { currentUser, logout } = useAuth();
 
   return (
     <AppBar
@@ -19,10 +20,10 @@ function Header() {
     >
       <Toolbar>
         <Typography variant="h4" sx={{ flexGrow: 1 }} fontWeight='bold'>
-          {`Name's To-Do List`}
+          {currentUser ? `${currentUser}'s To-Do List` : "Guest"}
         </Typography>
         <Button
-          // onClick={logout}
+          onClick={logout}
           sx={{
             backgroundColor: "#FFEBEB",
             "&:hover": {
