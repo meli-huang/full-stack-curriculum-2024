@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import './App.css';
 
+import { auth, googleProvider } from "./firebaseConfig";
+
+import { signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
+  signOut,
+  signInWithPopup,
+} from 'firebase/auth';
+
 function App() {
   // Separate state variables for login and signup
   const [loginEmail, setLoginEmail] = useState('');
@@ -12,19 +20,47 @@ function App() {
   const handleLogin = async (e) => {
     e.preventDefault();
     // TODO: Add Firebase login with email/password functionality here.
+    try {
+      const userCredential = signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      setUser(userCredential.user);
+      console.log("LOGIN SUCCESSFUL: ", userCredential.user);
+    } catch (error) {
+      console.error("LOGIN ERROR: ", error.message);
+    }
   };
 
   const handleSignup = async (e) => {
     e.preventDefault();
     // TODO: Add Firebase signup with email/password functionality here.
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, signupEmail, signupPassword);
+      setUser(userCredential.user);
+      console.log("ACCOUNT CREATED: ", userCredential.user);
+    } catch (error) {
+      console.error("SIGNUP ERROR: ", error.message);
+    }
   };
 
   const handleGoogleSignIn = async () => {
     // TODO: Add Firebase Google sign-in functionality here.
+    try {
+      const userCredential = signInWithPopup(auth, googleProvider);
+      setUser(userCredential.user);
+      console.log("GOOGLE LOGIN SUCCESSFUL: ", userCredential.user);
+    } catch (error) {
+      console.error("GOOGLE LOGIN ERROR: ", error.message);
+    }
   };
 
   const handleLogout = async () => {
     // TODO: Add Firebase logout functionality here.
+    try {
+      await signOut(auth);
+      setUser(null);
+      console.log("LOGGED OUT SUCCESSFULLY");
+    } catch (error) {
+      console.error("SIGNOUT ERROR: ", error.message);
+    }
   };
 
   return (
