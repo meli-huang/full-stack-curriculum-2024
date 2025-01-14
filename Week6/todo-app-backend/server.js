@@ -15,8 +15,24 @@ const db = require("./firebase");
 // Middlewares to handle cross-origin requests and to parse the body of incoming requests to JSON
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
+
+// Middleware to validate input of post request
+const validateInput = (req, res, next) => {
+  const { user, task } = req.body;
+  if (user && task ) {
+      next();
+  } else {
+      res.status(400).json({ error: 'incomplete input' });
+  }
+};
 
 // Your API routes will go here...
+
+// Root route
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
 
 // GET: Endpoint to retrieve all tasks
 app.get("/tasks", async (req, res) => {
@@ -42,13 +58,63 @@ app.get("/tasks", async (req, res) => {
 });
 
 // GET: Endpoint to retrieve all tasks for a user
-// ... 
+app.get("/tasks/:user", async (req, res) => {
+  try {
+    const { user } = req.params;
+    const userSnapshot = await db.collection("tasks").where("user", "==", user).get();
+    if (userSnapshot.empty) {
+      res.status(404).json({ error: "No tasks found for this user" });
+    } else {
+      let tasks = [];
+      userSnapshot.forEach((doc) => {
+        tasks.push({
+          id: doc.id, 
+          ...doc.data(),
+        });
+      });
+      res.status(200).send(tasks);
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+})
 
 // POST: Endpoint to add a new task
-// ...
+app.post("/tasks", validateInput, async (req, res) => {
+  try {
+    let newTask = {
+      finished: req.body.finished,
+      task: req.body.task,
+      user: req.body.user,
+    }
+
+    const addedTask = await db.collection("tasks").add(newTask);
+    res.status(201).json({
+      id: addedTask.id,  // Automatically generated Document ID from Firestore
+      ...newTask,
+    });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+})
 
 // DELETE: Endpoint to remove a task
-// ...
+app.delete("/tasks/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const taskRef = db.collection("tasks").doc(id);
+    const taskSnapshot = await taskRef.get();
+
+    if (!taskSnapshot.exists) {
+      res.status(404).json({ error: "Task not found" })
+    } else {
+      await taskRef.delete();
+      res.json({ id, ...taskSnapshot.data() });
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+})
 
 // Setting the port for the server to listen on
 const PORT = process.env.PORT || 3001;
