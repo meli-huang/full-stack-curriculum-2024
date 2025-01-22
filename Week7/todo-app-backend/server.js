@@ -37,7 +37,7 @@ const validateInput = (req, res, next) => {
 };
 
 // Firebase Admin Authentication Middleware
-const auth = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   try {
     const tokenId = req.get("Authorization").split("Bearer ")[1];
     admin.auth().verifyIdToken(tokenId)
@@ -83,7 +83,7 @@ app.get("/tasks", async (req, res) => {
 });
 
 // GET: Endpoint to retrieve all tasks for a user
-app.get("/tasks/:uid", auth, async (req, res) => {
+app.get("/tasks/:uid", authMiddleware, async (req, res) => {
   try {
     const { uid } = req.params;
     const userSnapshot = await db.collection("tasks").where("uid", "==", uid).get();

@@ -37,7 +37,8 @@ export const useAuth = () => {
 export function AuthProvider({ children }) {
     const navigate = useNavigate();
     
-    const [currentUser, setCurrentUser] = useState(null);
+    // const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState((localStorage.getItem('username')));
     const [loginError, setLoginError] = useState(null);
 
     // Sign up new users

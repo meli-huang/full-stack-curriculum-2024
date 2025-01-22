@@ -38,7 +38,7 @@ export default function HomePage() {
       fetch(`http://localhost:3001/tasks/${currentUser.uid}`, 
         {
           headers: {
-            'Authorization': `Bearer: ${currentUser.accessToken}`
+            'Authorization': `Bearer ${currentUser.accessToken}`
           } 
         })
         .then((response) => response.json())
