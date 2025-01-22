@@ -17,7 +17,7 @@ const { db } = require("./firebase");
 
 // Enable CORS for a specific origin (frontend URL)
 app.use(cors({
-  origin: 'https://todo-app-backend-cyan.vercel.app', // Replace with your frontend URL
+  origin: 'https://todo-app-frontend-umber.vercel.app', // Replace with your frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed custom headers
   credentials: true, // Allow cookies or authorization headers
