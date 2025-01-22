@@ -23,6 +23,8 @@ app.use(cors({
   credentials: true, // Allow cookies or authorization headers
 }));
 
+app.options('*', cors({ origin: 'https://todo-app-frontend-umber.vercel.app' }));
+
 app.use(bodyParser.json());
 app.use(express.json());
 
