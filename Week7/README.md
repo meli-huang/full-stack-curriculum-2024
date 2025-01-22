@@ -47,7 +47,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Sign up new users
-  const register = (email, password) => {
+const register = (email, password) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setCurrentUser(userCredential.user);

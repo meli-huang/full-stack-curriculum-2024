@@ -14,7 +14,8 @@ This week, after all the hard work done with creating a frontend and connecting 
 
 ### Step 1: Prepare Your Environment Variables
 
-1. **Frontend**: 
+1. **Frontend**:
+
    - Open your React project.
    - Replace all instances of your backend URL (e.g., `http://localhost:5000`) with `process.env.REACT_APP_BACKEND`.
    - Create a `.env` file in your React project root directory with the following content:
@@ -30,6 +31,7 @@ This week, after all the hard work done with creating a frontend and connecting 
 ### Step 2: Deploy Your Backend to Vercel
 
 1. **Create a New Vercel Project**:
+
    - Go to [Vercel](https://vercel.com) and log in.
    - Click on "New Project" and select your backend repository from GitHub.
    - Configure the project settings:
@@ -54,9 +56,11 @@ This week, after all the hard work done with creating a frontend and connecting 
 ### Step 4: Test Your Deployed Application
 
 1. **Test the Frontend**:
+
    - Visit the URL provided by Vercel for your frontend. Ensure that all functionalities work as expected and that it correctly communicates with your deployed backend.
 
 2. **Test the Backend**:
+
    - Optionally, you can test the backend directly by sending requests to the Vercel-provided URL using Postman or another tool.
 
 3. **Troubleshoot**:
