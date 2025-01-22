@@ -16,14 +16,16 @@ const { db } = require("./firebase");
 // Middlewares to handle cross-origin requests and to parse the body of incoming requests to JSON
 
 // Enable CORS for a specific origin (frontend URL)
-app.use(cors({
-  origin: 'https://todo-app-frontend-umber.vercel.app', // Replace with your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed custom headers
-  credentials: true, // Allow cookies or authorization headers
-}));
+// app.use(cors({
+//   origin: 'https://todo-app-frontend-umber.vercel.app', // Replace with your frontend URL
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+//   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed custom headers
+//   credentials: true, // Allow cookies or authorization headers
+// }));
 
-app.options('*', cors({ origin: 'https://todo-app-frontend-umber.vercel.app' }));
+// app.options('*', cors({ origin: 'https://todo-app-frontend-umber.vercel.app' }));
+
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(express.json());
